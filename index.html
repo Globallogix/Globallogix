@@ -178,27 +178,35 @@
     </footer>
 
     <script>lucide.createIcons();</script>
-    <div id="scribblePad" style="position: fixed; bottom: 20px; right: 20px; width: 250px; background: rgba(26, 26, 26, 0.95); border: 1px solid #2E7D32; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 9999; font-family: sans-serif; overflow: hidden;">
-    <div style="background: #2E7D32; color: white; padding: 10px; font-size: 12px; font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
-        <span>QUICK NOTES</span>
-        <button onclick="clearScribble()" style="background: none; border: 1px solid white; color: white; font-size: 9px; cursor: pointer; padding: 2px 5px; border-radius: 3px;">CLEAR</button>
+   <div id="smartPad" style="position: fixed; bottom: 20px; right: 20px; width: 260px; background: rgba(15, 15, 15, 0.98); border: 2px solid #2E7D32; border-radius: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.8); z-index: 9999; font-family: 'Segoe UI', sans-serif; overflow: hidden;">
+    
+    <div style="background: #2E7D32; color: white; padding: 12px; font-size: 11px; font-weight: 800; display: flex; justify-content: space-between; align-items: center; letter-spacing: 1px;">
+        <span>AFSHA WORKSPACE</span>
+        <button onclick="clearAll()" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.5); color: white; font-size: 9px; cursor: pointer; padding: 3px 8px; border-radius: 4px; text-transform: uppercase;">Reset</button>
     </div>
     
-    <canvas id="canvas" width="250" height="200" style="cursor: crosshair; touch-action: none; background: #000;"></canvas>
+    <div style="border-bottom: 1px solid #333;">
+        <canvas id="canvas" width="260" height="150" style="cursor: crosshair; touch-action: none; background: #000; display: block;"></canvas>
+    </div>
+
+    <div style="padding: 5px; background: #111;">
+        <textarea id="noteArea" placeholder="Type cargo details or notes here..." style="width: 100%; height: 80px; background: transparent; border: none; color: #90ee90; font-size: 13px; outline: none; resize: none; padding: 10px; box-sizing: border-box; font-family: 'Courier New', monospace; border-top: 1px solid #222;"></textarea>
+    </div>
     
-    <div style="padding: 8px; font-size: 9px; color: #888; text-align: center; border-top: 1px solid #333;">
-        Scribble notes here for Afsha Group
+    <div style="padding: 6px; font-size: 9px; color: #555; text-align: center; background: #0a0a0a; letter-spacing: 1px;">
+        DRAW & TYPE • LOGISTICS UTILITY
     </div>
 </div>
 
 <script>
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
+    const noteArea = document.getElementById('noteArea');
     let drawing = false;
 
-    // Set Pen Style
-    ctx.strokeStyle = '#90ee90'; // Emerald Green Pen
-    ctx.lineWidth = 2;
+    // Set Pen Style (Emerald Green)
+    ctx.strokeStyle = '#2E7D32'; 
+    ctx.lineWidth = 3;
     ctx.lineCap = 'round';
 
     function startDrawing(e) {
@@ -213,23 +221,19 @@
 
     function draw(e) {
         if (!drawing) return;
-        
-        // Handle both Mouse and Touch
         const rect = canvas.getBoundingClientRect();
-        const x = (e.clientX || e.touches[0].clientX) - rect.left;
-        const y = (e.clientY || e.touches[0].clientY) - rect.top;
+        const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+        const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
 
         ctx.lineTo(x, y);
         ctx.stroke();
         ctx.beginPath();
         ctx.moveTo(x, y);
     }
-
-    function clearScribble() {
+    function clearAll() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        noteArea.value = '';
     }
-
-    // Event Listeners
     canvas.addEventListener('mousedown', startDrawing);
     canvas.addEventListener('mousemove', draw);
     canvas.addEventListener('mouseup', stopDrawing);
