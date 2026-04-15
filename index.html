@@ -275,5 +275,78 @@
     canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); }, {passive: false});
     canvas.addEventListener('touchend', stopDrawing);
 </script>
+    <div id="chatWrapper" style="position: fixed; bottom: 20px; right: 320px; z-index: 9999; font-family: 'Segoe UI', sans-serif;">
+    
+    <div id="chatBox" style="display: none; width: 280px; height: 380px; background: #0a0a0a; border: 2px solid #2E7D32; border-radius: 15px; flex-direction: column; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.8);">
+        <div style="background: #2E7D32; color: white; padding: 12px; font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 12px; letter-spacing: 1px;">AFSHA AI ASSISTANT</span>
+            <span onclick="toggleChat()" style="cursor: pointer; font-size: 18px;">×</span>
+        </div>
+        
+        <div id="chatMessages" style="flex: 1; padding: 15px; overflow-y: auto; color: #ddd; font-size: 13px; display: flex; flex-direction: column; gap: 10px; background: #050505;">
+            <div style="background: #1a1a1a; padding: 10px; border-radius: 8px; border-left: 3px solid #2E7D32;">
+                Hello! I'm the Afsha Group AI. How can I help with your cargo or travel plans today?
+            </div>
+        </div>
+
+        <div style="padding: 10px; border-top: 1px solid #222; display: flex; gap: 5px; background: #0a0a0a;">
+            <input type="text" id="chatInput" placeholder="Ask a question..." style="flex: 1; background: #111; border: 1px solid #333; color: white; padding: 10px; border-radius: 5px; outline: none; font-size: 12px;">
+            <button onclick="sendMessage()" style="background: #2E7D32; border: none; color: white; padding: 0 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">GO</button>
+        </div>
+    </div>
+
+    <div onclick="toggleChat()" style="width: 55px; height: 55px; background: #2E7D32; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 8px 20px rgba(0,0,0,0.4); margin-left: auto; transition: transform 0.3s ease;">
+        <span style="font-size: 24px; color: white;">💬</span>
+    </div>
+</div>
+
+<style>
+    /* Mobile adjustment to prevent overlap */
+    @media (max-width: 600px) {
+        #chatWrapper {
+            right: 170px; /* Moves it next to the smaller mobile smartpad */
+            bottom: 15px;
+        }
+        #chatBox {
+            width: 220px;
+            height: 300px;
+        }
+    }
+</style>
+
+<script>
+    function toggleChat() {
+        const chat = document.getElementById('chatBox');
+        chat.style.display = chat.style.display === 'none' ? 'flex' : 'none';
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('chatInput');
+        const container = document.getElementById('chatMessages');
+        if (!input.value.trim()) return;
+
+        const userMsg = document.createElement('div');
+        userMsg.style.cssText = "align-self: flex-end; background: #2E7D32; color: white; padding: 10px; border-radius: 10px 10px 0 10px; max-width: 85%; font-size: 12px;";
+        userMsg.innerText = input.value;
+        container.appendChild(userMsg);
+
+        const query = input.value.toLowerCase();
+        let response = "That's a great question. Please contact our support team at info@afshagroup.com for a detailed quote.";
+
+        if(query.includes("rate") || query.includes("price")) response = "MCT-ALG rates start at $2.50/kg. Check our 'Tariff' section for the latest KBL and ALG updates.";
+        if(query.includes("holiday") || query.includes("package")) response = "Nexplan Holidays offers customized tours to Europe and Asia. Would you like to see our latest brochure?";
+        if(query.includes("ceo") || query.includes("afsal")) response = "Our CEO, Mr. Afsaluddeen Hamsa, leads Afsha Group with a vision for global connectivity.";
+
+        setTimeout(() => {
+            const aiMsg = document.createElement('div');
+            aiMsg.style.cssText = "align-self: flex-start; background: #1a1a1a; color: #90ee90; padding: 10px; border-radius: 10px 10px 10px 0; max-width: 85%; border-left: 3px solid #2E7D32; font-size: 12px;";
+            aiMsg.innerText = response;
+            container.appendChild(aiMsg);
+            container.scrollTop = container.scrollHeight;
+        }, 600);
+
+        input.value = '';
+    }
+</script>
 </body>
 </html>
